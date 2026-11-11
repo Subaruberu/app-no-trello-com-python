@@ -90,9 +90,9 @@ Assim, "Concluído", "concluida", "DONE" e "feito" chegam na mesma lista.
 - **Testes automáticos** com um cliente falso do Trello, sem tocar no quadro
   real: criação, listagem, filtro por status, movimentação, remoção, quadro
   inexistente e listas em inglês (`To Do` / `Doing` / `Done`).
-- **Teste manual** no `adk web`, criando um card com vencimento no dia
-  seguinte e conferindo a data no Trello, e movendo o mesmo card dizendo
-  "terminei essa tarefa".
+- **Roteiro de teste manual** no `adk web` (checklist abaixo): criar um card
+  com vencimento no dia seguinte, conferir a data no Trello e mover o mesmo
+  card dizendo "terminei essa tarefa".
 
 ```bash
 python -m pytest -q

@@ -68,6 +68,7 @@ def main() -> int:
 
     listas = [lista.name for lista in padrao.list_lists()]
     print(f"[OK] Listas do quadro '{padrao.name}': {', '.join(listas) or 'nenhuma'}")
+    print(f"     URL do quadro: {padrao.url}")
     return 0
 
 
