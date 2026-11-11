@@ -39,6 +39,11 @@ O agente só afirma que criou, moveu ou removeu algo **depois** de chamar a
 ferramenta e receber sucesso. Se a ferramenta devolver erro, ele explica o
 problema em vez de inventar um resultado.
 
+> No `adk web`, a conversa começa quando você envia a primeira mensagem (um
+> "oi" basta). Nessa resposta o agente usa `get_temporal_context`,
+> cumprimenta com a data de hoje e pergunta as tarefas. O ADK não permite que
+> o agente envie a primeira mensagem sozinho.
+
 ---
 
 ## Melhoria escolhida: datas certas e status sem dor de cabeça
@@ -99,8 +104,9 @@ python -m pytest -q
 - **`try/except` em todas as ferramentas:** erros de credencial, rede, status
   ou card inexistente voltam como mensagem amigável, sem derrubar o agente.
 - **Ferramenta de remoção:** a instrução prometia remover tarefas, mas o
-  código não tinha a função. Agora `remover_tarefa` existe e está alinhada à
-  instrução.
+  código não tinha a função. Agora `remover_tarefa` existe, está alinhada à
+  instrução e é registrada com `require_confirmation=True`: o ADK web mostra
+  um botão de confirmação antes de apagar o card.
 - **Vários quadros:** `listar_quadros` e o parâmetro opcional `quadro` em
   todas as ferramentas permitem escolher onde a tarefa entra.
 - **Script de preparação:** `scripts/criar_quadro.py` cria o quadro e as três
@@ -119,7 +125,9 @@ python -m pytest -q
 │   ├── trello_service.py   # conexão e operações no Trello
 │   └── utils.py            # normalização de texto e datas
 ├── scripts/
-│   └── criar_quadro.py     # cria o quadro e as listas
+│   ├── criar_quadro.py     # cria o quadro e as listas
+│   ├── teste_real.py       # testa o fluxo completo no Trello, sem Gemini
+│   └── verificar_conexao.py # confere .env e conexão com o Trello
 ├── docs/
 │   └── guia-trello.md      # passo a passo de credenciais e problemas comuns
 ├── tests/
@@ -299,6 +307,28 @@ python -m pytest -q
 
 Os testes usam um **cliente falso** do Trello. Eles não precisam de chave do
 Gemini, token do Trello nem internet, e não alteram o seu quadro.
+
+### Verificação de conexão
+
+Depois de preencher o `.env`:
+
+```bash
+python scripts/verificar_conexao.py
+```
+
+O script confere se as variáveis existem, lista os quadros visíveis e mostra
+as listas do quadro padrão. Ele **não exibe** chaves nem tokens.
+
+### Fluxo completo no Trello real (sem gastar Gemini)
+
+```bash
+python scripts/teste_real.py
+```
+
+Esse script cria um card de teste, lista, move para **Em andamento**, move
+para **Concluído** e remove o card no final. É a forma mais rápida de validar
+credenciais e nomes de listas sem consumir a cota diária do modelo. Ele
+também tenta limpar o card se algo falhar no meio do caminho.
 
 ### Checklist manual no `adk web`
 

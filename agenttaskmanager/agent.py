@@ -11,6 +11,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from google.adk.agents import Agent
+from google.adk.tools import FunctionTool
 
 from . import trello_service as trello
 from .config import fuso_horario, modelo_gemini
@@ -241,6 +242,7 @@ root_agent = Agent(
         adicionar_tarefa,
         listar_tarefas,
         mudar_status_tarefa,
-        remover_tarefa,
+        # O ADK mostra uma confirmação no chat antes de executar a remoção.
+        FunctionTool(remover_tarefa, require_confirmation=True),
     ],
 )

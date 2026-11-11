@@ -1,4 +1,4 @@
-google-adk>=1.0.0
+google-adk>=2.0.0,<3.0.0
 py-trello>=0.20.0
 python-dotenv>=1.0.1
 tzdata>=2024.1
