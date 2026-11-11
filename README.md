@@ -1,6 +1,6 @@
 # Agente de Tarefas no Trello com Google ADK
 
-[![tests](https://github.com/Subaruberu/App-no-Trello-com-Python/actions/workflows/tests.yml/badge.svg)](https://github.com/Subaruberu/App-no-Trello-com-Python/actions/workflows/tests.yml)
+[![tests](https://github.com/Subaruberu/app-no-trello-com-python/actions/workflows/tests.yml/badge.svg)](https://github.com/Subaruberu/app-no-trello-com-python/actions/workflows/tests.yml)
 
 Um agente de IA que conversa em português, organiza as tarefas do dia e
 trabalha de verdade em um quadro do Trello. Cada ação é uma função Python
@@ -173,8 +173,8 @@ flowchart LR
 ### 2. Clone o repositório e crie o ambiente virtual
 
 ```bash
-git clone https://github.com/Subaruberu/App-no-Trello-com-Python.git
-cd App-no-Trello-com-Python
+git clone https://github.com/Subaruberu/app-no-trello-com-python.git
+cd app-no-trello-com-python
 ```
 
 Windows (PowerShell):
