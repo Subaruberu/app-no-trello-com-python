@@ -1,5 +1,7 @@
 # Agente de Tarefas no Trello com Google ADK
 
+[![tests](https://github.com/Subaruberu/App-no-Trello-com-Python/actions/workflows/tests.yml/badge.svg)](https://github.com/Subaruberu/App-no-Trello-com-Python/actions/workflows/tests.yml)
+
 Um agente de IA que conversa em português, organiza as tarefas do dia e
 trabalha de verdade em um quadro do Trello. Cada ação é uma função Python
 registrada como ferramenta no **Agent Development Kit (ADK)** do Google,
