@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
 
@@ -22,7 +23,12 @@ VARIAVEIS_TRELLO = ("TRELLO_API_KEY", "TRELLO_API_SECRET", "TRELLO_TOKEN")
 
 
 def fuso_horario() -> str:
-    return os.getenv("TRELLO_TIMEZONE", "America/Sao_Paulo").strip() or "America/Sao_Paulo"
+    nome = os.getenv("TRELLO_TIMEZONE", "America/Sao_Paulo").strip() or "America/Sao_Paulo"
+    try:
+        ZoneInfo(nome)
+    except Exception:  # noqa: BLE001 - fuso inválido no .env
+        return "America/Sao_Paulo"
+    return nome
 
 
 def quadro_padrao() -> str:
