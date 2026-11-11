@@ -1,0 +1,28 @@
+# Credenciais e configurações locais
+.env
+.env.*
+!.env.exemplo
+
+# Ambiente virtual
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# ADK
+.adk/
+adk_web/
+*.log
+
+# Sistema operacional / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
