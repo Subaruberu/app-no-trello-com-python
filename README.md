@@ -170,8 +170,8 @@ flowchart LR
 ### 2. Clone o repositório e crie o ambiente virtual
 
 ```bash
-git clone https://github.com/SEU-USUARIO/agente-tarefas-trello-adk.git
-cd agente-tarefas-trello-adk
+git clone https://github.com/Subaruberu/App-no-Trello-com-Python.git
+cd App-no-Trello-com-Python
 ```
 
 Windows (PowerShell):
