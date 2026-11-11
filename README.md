@@ -90,9 +90,9 @@ Assim, "Concluído", "concluida", "DONE" e "feito" chegam na mesma lista.
 - **Testes automáticos** com um cliente falso do Trello, sem tocar no quadro
   real: criação, listagem, filtro por status, movimentação, remoção, quadro
   inexistente e listas em inglês (`To Do` / `Doing` / `Done`).
-- **Roteiro de teste manual** no `adk web` (checklist abaixo): criar um card
-  com vencimento no dia seguinte, conferir a data no Trello e mover o mesmo
-  card dizendo "terminei essa tarefa".
+- **Teste manual executado** no `adk web` e no Trello real (checklist e
+  capturas abaixo): criar cards com vencimento, conferir a data no quadro,
+  mover dizendo "terminei essa tarefa" e remover com confirmação.
 
 ```bash
 python -m pytest -q
@@ -131,7 +131,8 @@ python -m pytest -q
 │   ├── teste_real.py       # testa o fluxo completo no Trello, sem Gemini
 │   └── verificar_conexao.py # confere .env e conexão com o Trello
 ├── docs/
-│   └── guia-trello.md      # passo a passo de credenciais e problemas comuns
+│   ├── guia-trello.md      # passo a passo de credenciais e problemas comuns
+│   └── *.png, *.jpeg       # capturas do adk web e do quadro
 ├── tests/
 │   ├── test_agent_tools.py
 │   └── test_trello_service.py
@@ -246,6 +247,7 @@ cp .env.exemplo .env
 ```dotenv
 GOOGLE_GENAI_USE_VERTEXAI=0
 GOOGLE_API_KEY=sua-chave-do-google-ai-studio
+GEMINI_MODEL=gemini-2.5-flash
 
 TRELLO_API_KEY=sua-chave
 TRELLO_API_SECRET=seu-segredo
@@ -257,6 +259,13 @@ TRELLO_TIMEZONE=America/Sao_Paulo
 
 O `.env` está no `.gitignore` e **não deve ser commitado**. O
 `.env.exemplo` fica no repositório apenas com valores fictícios.
+
+> **Cota do plano gratuito:** `gemini-2.5-flash` no nível gratuito tem limite
+> de 5 requisições por minuto e 20 por dia. Cada mensagem da conversa gasta
+> mais de uma requisição (o agente chama ferramentas em sequência), então uma
+> conversa longa pode esgotar o dia. Se isso acontecer, troque
+> `GEMINI_MODEL` por um modelo com cota maior, como
+> `gemini-3.5-flash-lite`, e reinicie o `adk web`.
 
 ### 6. Rode o agente
 
@@ -307,6 +316,36 @@ Agente: ✅ "Enviar relatório mensal": A fazer → Concluído.
 
 ---
 
+## Demonstração
+
+Conversa real no `adk web` com o agente criando, movendo, listando e
+removendo cards no quadro **Dio** do Trello.
+
+**1. Saudação com a data atual** (a ferramenta `get_temporal_context` é
+chamada antes de responder):
+
+![Saudação do agente com a data de hoje](docs/adk-web-01-saudacao.png)
+
+**2. Criação das três tarefas e mudança de status:**
+
+![Criação das tarefas e movimentação entre listas](docs/adk-web-02-criacao-e-status.png)
+
+**3. Listagem do quadro e remoção com confirmação do ADK:**
+
+![Listagem das tarefas e confirmação de remoção](docs/adk-web-03-lista-e-remocao.png)
+
+O ADK exibe um diálogo de confirmação antes de executar `remover_tarefa`
+(registrada com `require_confirmation=True`):
+
+![Diálogo de confirmação antes de remover a tarefa](docs/adk-web-04-confirmacao.jpeg)
+
+**Resultado no Trello** depois da conversa — cada card na lista certa e com
+o vencimento no dia correto:
+
+![Quadro do Trello após a conversa](docs/trello-board.png)
+
+---
+
 ## Como testar
 
 ### Testes automáticos
@@ -343,15 +382,23 @@ também tenta limpar o card se algo falhar no meio do caminho.
 
 ### Checklist manual no `adk web`
 
-- [ ] O agente cumprimenta com a data de hoje.
-- [ ] Cria um card com nome, descrição e data.
-- [ ] A data no Trello é a mesma informada (sem um dia a menos).
-- [ ] Lista todas as tarefas e filtra por "em andamento" e "concluído".
-- [ ] Move um card dizendo "terminei..." e o card muda de lista.
-- [ ] Aceita "concluído" com acento e "done".
-- [ ] Pede confirmação antes de remover e remove o card.
-- [ ] Com mais de um quadro, pergunta em qual criar a tarefa.
-- [ ] Ao simular erro (ex.: token inválido), responde com mensagem clara.
+Itens executados de ponta a ponta no quadro real durante a demonstração:
+
+- [x] O agente cumprimenta com a data de hoje.
+- [x] Cria cards com nome e data de vencimento em **A fazer**.
+- [x] A data no Trello é a mesma informada (sem um dia a menos).
+- [x] Lista todas as tarefas do quadro.
+- [x] Move um card dizendo "terminei..." e o card muda de lista.
+- [x] Aceita "Concluído" com acento na conversa.
+- [x] Pede confirmação antes de remover e remove o card.
+
+Os cenários restantes são cobertos pelos testes automáticos, sem gastar cota
+do Gemini nem alterar o quadro:
+
+- [x] Filtra a listagem por "em andamento" e "concluído".
+- [x] Com mais de um quadro, usa o quadro informado.
+- [x] Ao simular erro (token inválido, card inexistente), responde com
+  mensagem clara em vez de derrubar o agente.
 
 > Dica: use um quadro de testes. O agente cria e apaga cards de verdade.
 
