@@ -147,6 +147,15 @@ A separação é simples de propósito:
 - `trello_service.py` concentra a API do Trello;
 - `utils.py` tem funções puras, fáceis de testar.
 
+```mermaid
+flowchart LR
+    U[Usuário] -->|conversa em português| A[Agente ADK + Gemini]
+    A -->|escolhe e chama| F[Ferramentas em Python]
+    F -->|criar, listar, mover, remover| S[trello_service.py]
+    S -->|py-trello| T[(API do Trello)]
+    S -->|datas e status| H[utils.py]
+```
+
 ---
 
 ## Como rodar
